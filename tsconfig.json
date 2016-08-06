@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": true,
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noImplicitAny": true
+    },
+    "filesGlob": [
+        "**/*.ts",
+        "!**/*.d.ts",
+        "!node_modules/**/*.*",
+        "node_modules/typescript/lib/lib.es6.d.ts"
+    ],
+    "files": [
+        "index.ts",
+        "src/component-outlet.ts",
+        "node_modules/typescript/lib/lib.es6.d.ts"
+    ]
+}
