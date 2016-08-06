@@ -1,7 +1,6 @@
 import {
   Component,
   ComponentMetadata,
-  ComponentFactory,
   Compiler,
   Directive,
   Input,

@@ -1,12 +1,13 @@
 {
   "name": "angular2-component-outlet",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Angular2 Component Outlet",
   "main": "index.js",
   "scripts": {
     "_tsconfig": "tsconfig -u tsconfig.json",
     "tsc": "tsc -p .",
-    "build": "npm run _tsconfig && npm run tsc"
+    "build": "npm run _tsconfig && npm run tsc",
+    "prepublish": "npm run build"
   },
   "authors": ["Suguru Inatomi"],
   "license": "MIT",
