@@ -37,45 +37,56 @@ import { FormsModule } from '@angular/forms';
  * ```
  *
  */
- @Directive({
- 	selector: '[componentOutlet]',
- })
- export class ComponentOutlet {
- 	@Input('componentOutlet') private template: string;
- 	@Input('componentOutletSelector') private selector: string;
- 	@Input('componentOutletContext') private context: Object;
 
- 	constructor(private vcRef: ViewContainerRef, private compiler: Compiler) {
+@Directive({
+	selector: '[componentOutlet]',
+})
+export class ComponentOutlet {
+	@Input('componentOutlet') private template: string;
+	@Input('componentOutletSelector') private selector: string;
+	@Input('componentOutletContext') private context: Object;
+	@Input('componentOutletImports') private imports: any[] = [];
 
- 	}
+	constructor(private vcRef: ViewContainerRef, private compiler: Compiler) {}
 
- 	private _createDynamicComponent() {
- 		const metadata = new ComponentMetadata({
- 			selector: this.selector,
- 			template: this.template,
- 		});
+	private _createDynamicComponent() {
+		const metadata = new ComponentMetadata({
+			selector: this.selector,
+			template: this.template,
+		});
 
- 		const cmpClass = class _ { };
- 		cmpClass.prototype = this.context;
+		const cmpClass = class _ { };
+		cmpClass.prototype = this.context;
 
- 		let component = Component(metadata)(cmpClass);
+		let component = Component(metadata)(cmpClass);
 
- 		const mdClass = class _ { };
- 		mdClass.prototype = {};
- 		return NgModule({
- 			imports: [BrowserModule, FormsModule],
- 			declarations: [component],
- 			exports: [component],
- 			providers: []
- 		})(mdClass);
- 	}
+		const mdClass = class _ { };
+		mdClass.prototype = {};
+		return NgModule({
+			imports: [BrowserModule, FormsModule].concat(this.imports),
+			declarations: [component],
+			exports: [component],
+			providers: []
+		})(mdClass);
+	}
 
- 	ngOnChanges() {
- 		if (!this.template) return;
- 		this.compiler.compileModuleAndAllComponentsAsync(this._createDynamicComponent())
- 		.then(factory => {
- 			const injector = ReflectiveInjector.fromResolvedProviders([], this.vcRef.parentInjector);
- 			this.vcRef.createComponent(factory.componentFactories[0], 0, injector);
- 		});
- 	}
- }
+	ngOnChanges() {
+		let self = this;
+
+		if (!self.template) return;
+		self.compiler.compileModuleAndAllComponentsAsync(self._createDynamicComponent())
+		.then(factory => {
+			const injector = ReflectiveInjector.fromResolvedProviders([], self.vcRef.parentInjector);
+
+			let component;
+			for (let i = factory.componentFactories.length-1; i >= 0; i--) {
+				if (factory.componentFactories[i].selector === self.selector) {
+					component = factory.componentFactories[i];
+					break;
+				}
+			}
+
+			this.vcRef.createComponent(component, 0, injector);
+		});
+	}
+}
