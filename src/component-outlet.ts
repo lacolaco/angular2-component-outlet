@@ -1,6 +1,6 @@
 import { NgModule, Component, ComponentFactory, ComponentMetadata, NgModuleMetadataType,
 	Directive, Input, ViewContainerRef, Compiler, ReflectiveInjector } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 /**
@@ -63,7 +63,7 @@ export class ComponentOutlet {
 		const mdClass = class _ { };
 		mdClass.prototype = {};
 		return NgModule({
-			imports: [BrowserModule, FormsModule].concat(this.imports),
+			imports: [CommonModule, FormsModule].concat(this.imports),
 			declarations: [component],
 			exports: [component],
 			providers: []
@@ -78,7 +78,7 @@ export class ComponentOutlet {
 		.then(factory => {
 			const injector = ReflectiveInjector.fromResolvedProviders([], self.vcRef.parentInjector);
 
-			let component;
+			let component:any;
 			for (let i = factory.componentFactories.length-1; i >= 0; i--) {
 				if (factory.componentFactories[i].selector === self.selector) {
 					component = factory.componentFactories[i];
