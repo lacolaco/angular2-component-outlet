@@ -45,7 +45,7 @@ export class ComponentOutlet {
 	@Input('componentOutlet') private template: string;
 	@Input('componentOutletSelector') private selector: string;
 	@Input('componentOutletContext') private context: Object;
-	@Input('componentOutletImports') private imports: any[] = [];
+	@Input('componentOutletImports') private imports: any[] = [CommonModule, FormsModule];
 
 	constructor(private vcRef: ViewContainerRef, private compiler: Compiler) {}
 
@@ -55,15 +55,20 @@ export class ComponentOutlet {
 			template: this.template,
 		});
 
-		const cmpClass = class _ { };
-		cmpClass.prototype = this.context;
-
+		// have the new component class effectively inherit from this component
+		let ctx = this.context;
+		let cmpClass = class _ {
+			prototype:any = ctx;
+		 };
 		let component = Component(metadata)(cmpClass);
 
-		const mdClass = class _ { };
-		mdClass.prototype = {};
+		// make a module that does not inherit from anything except Object
+		let mdClass = class _ {
+		  prototype: any= {}
+		 };
+
 		return NgModule({
-			imports: [CommonModule, FormsModule].concat(this.imports),
+			imports: this.imports,
 			declarations: [component],
 			exports: [component],
 			providers: []
@@ -74,8 +79,12 @@ export class ComponentOutlet {
 		let self = this;
 
 		if (!self.template) return;
-		self.compiler.compileModuleAndAllComponentsAsync(self._createDynamicComponent())
+		console.log(self.template);
+		let selfDyn = self._createDynamicComponent();
+		console.log(selfDyn);
+		self.compiler.compileModuleAndAllComponentsAsync(selfDyn)
 		.then(factory => {
+			self.vcRef.clear(); // to remove any previously loaded template, if this template is re-created dynamically from the parent
 			const injector = ReflectiveInjector.fromResolvedProviders([], self.vcRef.parentInjector);
 
 			let component:any;
