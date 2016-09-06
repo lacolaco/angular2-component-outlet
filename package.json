@@ -4,19 +4,33 @@
   "description": "Angular2 Component Outlet",
   "main": "index.js",
   "scripts": {
-    "_tsconfig": "tsconfig -u tsconfig.json",
     "tsc": "tsc -p .",
-    "build": "npm run _tsconfig && npm run tsc",
-    "prepublish": "npm run build"
+    "build": "npm run tsc",
+    "prepublish": "npm test",
+    "test": "npm run tsc && karma start karma.conf.js"
   },
-  "authors": ["Suguru Inatomi"],
+  "authors": [
+    "Suguru Inatomi"
+  ],
   "license": "MIT",
   "peerDependencies": {
-    "@angular/compiler": "^2.0.0-rc.4",
-    "@angular/core": "^2.0.0-rc.4"
+    "@angular/compiler": "^2.0.0-rc.6",
+    "@angular/core": "^2.0.0-rc.6"
   },
   "devDependencies": {
-    "tsconfig-cli": "^2.0.0",
-    "typescript": "^1.9.0-dev"
+    "@angular/common": "^2.0.0-rc.6",
+    "@angular/compiler": "^2.0.0-rc.6",
+    "@angular/core": "^2.0.0-rc.6",
+    "@angular/platform-browser": "^2.0.0-rc.6",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.6",
+    "@types/jasmine": "^2.2.33",
+    "core-js": "^2.4.1",
+    "jasmine": "^2.5.0",
+    "karma": "1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-jasmine": "^1.0.2",
+    "systemjs": "^0.19.37",
+    "typescript": "^2.0.2"
   }
 }

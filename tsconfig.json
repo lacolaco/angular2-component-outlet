@@ -6,17 +6,19 @@
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "lib": [
+            "es2015", "dom"
+        ],
+        "types": [
+            "jasmine"
+        ]
     },
-    "filesGlob": [
-        "**/*.ts",
-        "!**/*.d.ts",
-        "!node_modules/**/*.*",
-        "node_modules/typescript/lib/lib.es6.d.ts"
+    "include": [
+        "src/**/*.ts",
+        "index.ts"
     ],
-    "files": [
-        "index.ts",
-        "src/component-outlet.ts",
-        "node_modules/typescript/lib/lib.es6.d.ts"
+    "exclude": [
+        "**/*.d.ts"
     ]
 }
