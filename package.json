@@ -10,12 +10,13 @@
     "test": "npm run tsc && karma start karma.conf.js"
   },
   "authors": [
-    "Suguru Inatomi"
+    "laco <laco0416+github@gmail.com>"
   ],
   "license": "MIT",
   "peerDependencies": {
     "@angular/compiler": "^2.0.0-rc.6",
-    "@angular/core": "^2.0.0-rc.6"
+    "@angular/core": "^2.0.0-rc.6",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.6"
   },
   "devDependencies": {
     "@angular/common": "^2.0.0-rc.6",

@@ -26,8 +26,7 @@ import {COMPONENT_OUTLET_MODULE} from './provider';
  *   selector: 'my-app',
  *   template: `
  *     <div *componentOutlet="template; context: self; selector:'my-component'"></div>
- *   `,
- *   directives: [ComponentOutlet]
+ *   `
  * })
  * export class AppComponent {
  *   self = this;

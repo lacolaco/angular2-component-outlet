@@ -13,8 +13,7 @@ Example:
   selector: 'my-app',
   template: `
     <div *componentOutlet="template; context: self; selector:'my-component'"></div>
-  `,
-  directives: [ComponentOutlet]
+  `
 })
 export class AppComponent {
   self = this;
@@ -24,6 +23,16 @@ export class AppComponent {
     <p>Dynamic Component</p>
   </div>`;
 }
+
+@NgModule({
+  providers: [
+    provideComponentOutletModule({
+      imports: [CommonModule]
+    })
+  ],
+  declarations: [ComponentOutlet]
+})
+class AppModule {}
 ```
 
 Result: 
@@ -37,3 +46,8 @@ Result:
     </my-component>
 </my-app>
 ```
+
+## Notes
+
+- `ComponentOutlet` needs `RuntimeCompiler` provided by `platform-browser-dynamic`. You cannot use `platformBrowser` instead of `platformBrowserDynamic`.
+  - For AoT compilation, you can use `platformBrowserDynamic().bootstrapModuleFactory()`.
