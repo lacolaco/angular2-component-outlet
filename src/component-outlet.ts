@@ -81,8 +81,12 @@ export class ComponentOutlet {
   private _createDynamicModule(componentType: Type<any>) {
     const declarations = this.moduleMeta.declarations || [];
     declarations.push(componentType);
-    this.moduleMeta.declarations = declarations;
-    return NgModule(this.moduleMeta)(class _ { })
+    const moduleMeta: NgModuleMetadataType = {
+      imports: this.moduleMeta.imports,
+      providers: this.moduleMeta.providers,
+      declarations: declarations
+    };
+    return NgModule(moduleMeta)(class _ { })
   }
 
   ngOnChanges() {
