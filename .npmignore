@@ -7,4 +7,6 @@
 /.vscode/
 /.idea/
 npm-debug.log
+karma-test-shim.js
+karma.conf.js
 
