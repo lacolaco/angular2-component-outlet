@@ -70,6 +70,7 @@ describe('ComponentOutlet', () => {
         fixture.detectChanges();
         fixture.ngZone.onStable.subscribe(() => {
             const dynamicCmps = fixture.debugElement.queryAll(el => el.name === 'my-component');
+            expect(dynamicCmps.length).toBe(2);
             dynamicCmps.forEach((dynamicCmp, index) => {
                 console.log(dynamicCmp.nativeElement.innerHTML);
                 expect(dynamicCmp.nativeElement.textContent).toBe(`Dynamic-${index + 1}`);
