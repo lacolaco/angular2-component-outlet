@@ -9,9 +9,11 @@
     "prepublish": "npm test",
     "test": "npm run tsc && karma start karma.conf.js"
   },
-  "authors": [
-    "laco <laco0416+github@gmail.com>"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laco0416/angular2-component-outlet.git"
+  },
+  "author": "laco <laco0416+github@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
     "@angular/compiler": "^2.0.0-rc.6",
