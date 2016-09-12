@@ -124,8 +124,17 @@ export class ComponentOutlet implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.component.destroy();
-    this.compiler.clearCacheFor(this.cmpType);
-    this.compiler.clearCacheFor(this.moduleType);
+    if (this.component) {
+        this.component.destroy();
+    }
+
+    if (this.compiler) {
+        if (this.cmpType) {
+            this.compiler.clearCacheFor(this.cmpType);
+        }
+        if (this.moduleType) {
+            this.compiler.clearCacheFor(this.moduleType);
+        }
+    }
   }
 }
