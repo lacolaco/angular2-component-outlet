@@ -11,16 +11,17 @@ import {
   NgModuleMetadataType,
   Type,
   ViewContainerRef,
-  ReflectiveInjector
+  ReflectiveInjector,
+  OnDestroy
 } from '@angular/core';
 
 import {COMPONENT_OUTLET_MODULE} from './provider';
 
 /**
  * ComponentOutlet is a directive to create dynamic component.
- * 
- * Example: 
- * 
+ *
+ * Example:
+ *
  * ```ts
  * @Component({
  *   selector: 'my-app',
@@ -30,16 +31,16 @@ import {COMPONENT_OUTLET_MODULE} from './provider';
  * })
  * export class AppComponent {
  *   self = this;
- * 
+ *
  *   template = `
  *   <div>
  *     <p>Dynamic Component</p>
  *   </div>`;
  * }
  * ```
- * 
- * Result: 
- * 
+ *
+ * Result:
+ *
  * ```html
  * <my-component>
  *    <div>
@@ -47,17 +48,19 @@ import {COMPONENT_OUTLET_MODULE} from './provider';
  *    </div>
  * </my-component>
  * ```
- * 
+ *
  */
 @Directive({
   selector: '[componentOutlet]',
 })
-export class ComponentOutlet {
+export class ComponentOutlet implements OnDestroy {
   @Input('componentOutlet') private template: string;
   @Input('componentOutletSelector') private selector: string;
-  @Input('componentOutletContext') private context: Object;
+  @Input('componentOutletContext') private context: any;
 
   component: ComponentRef<any>;
+  moduleType: any;
+  cmpType: any;
 
   constructor(
     @Inject(COMPONENT_OUTLET_MODULE) private moduleMeta: NgModuleMetadataType,
@@ -66,15 +69,21 @@ export class ComponentOutlet {
   ) { }
 
   private _createDynamicComponent(): Type<any> {
-    this.context = this.context || {};
+    let ctx = this.context;
 
     const metadata = new ComponentMetadata({
       selector: this.selector,
       template: this.template,
     });
 
-    const cmpClass = class _ { };
-    cmpClass.prototype = this.context;
+    const cmpClass = class _ implements OnDestroy {
+        context = ctx;
+
+        ngOnDestroy() {
+            ctx = null;
+        }
+    };
+
     return Component(metadata)(cmpClass);
   }
 
@@ -91,10 +100,10 @@ export class ComponentOutlet {
 
   ngOnChanges() {
     if (!this.template) return;
-    const cmpType = this._createDynamicComponent();
-    const moduleType = this._createDynamicModule(cmpType);
+    this.cmpType = this._createDynamicComponent();
+    this.moduleType = this._createDynamicModule(this.cmpType);
     const injector = ReflectiveInjector.fromResolvedProviders([], this.vcRef.parentInjector);
-    this.compiler.compileModuleAndAllComponentsAsync<any>(moduleType)
+    this.compiler.compileModuleAndAllComponentsAsync<any>(this.moduleType)
       .then(factory => {
         let cmpFactory: any;
         for (let i = factory.componentFactories.length - 1; i >= 0; i--) {
@@ -112,5 +121,20 @@ export class ComponentOutlet {
           this.component.changeDetectorRef.detectChanges();
         }
       });
+  }
+
+  ngOnDestroy() {
+    if (this.component) {
+        this.component.destroy();
+    }
+
+    if (this.compiler) {
+        if (this.cmpType) {
+            this.compiler.clearCacheFor(this.cmpType);
+        }
+        if (this.moduleType) {
+            this.compiler.clearCacheFor(this.moduleType);
+        }
+    }
   }
 }
