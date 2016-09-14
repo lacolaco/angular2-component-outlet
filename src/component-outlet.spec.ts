@@ -1,8 +1,8 @@
-import {TestBed, async} from '@angular/core/testing';
-import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { TestBed, async } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import {ComponentOutlet, provideComponentOutletModule} from '../index';
+import { ComponentOutlet, provideComponentOutletModule } from '../index';
 
 @Component({
     template: `<div *componentOutlet="template; context: context; selector:'my-component'"></div>`
@@ -43,7 +43,7 @@ class MultipleCmp {
 
 describe('ComponentOutlet', () => {
 
-    beforeEach((done) => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [ComponentOutlet, MultipleCmp, TestCmp],
             providers: [
@@ -52,28 +52,49 @@ describe('ComponentOutlet', () => {
                 })
             ]
         });
-        TestBed.compileComponents().then(() => done());
     });
 
     it('simple', async(() => {
-        const fixture = TestBed.createComponent(TestCmp);
-        fixture.detectChanges();
-        fixture.ngZone.onStable.subscribe(() => {
-            const dynamicCmp = fixture.debugElement.query(el => el.name === 'my-component')
-            console.log(dynamicCmp.nativeElement.innerHTML);
-            expect(dynamicCmp.nativeElement.textContent).toBe('Dynamic');
+        TestBed.compileComponents().then(() => {
+            const fixture = TestBed.createComponent(TestCmp);
+            fixture.detectChanges();
+            fixture.ngZone.onStable.subscribe(() => {
+                const dynamicCmp = fixture.debugElement.query(el => el.name === 'my-component')
+                console.log(dynamicCmp.nativeElement.innerHTML);
+                expect(dynamicCmp.nativeElement.textContent).toBe('Dynamic');
+            });
         });
     }));
 
     it('multiple', async(() => {
-        const fixture = TestBed.createComponent(MultipleCmp);
-        fixture.detectChanges();
-        fixture.ngZone.onStable.subscribe(() => {
-            const dynamicCmps = fixture.debugElement.queryAll(el => el.name === 'my-component');
-            expect(dynamicCmps.length).toBe(2);
-            dynamicCmps.forEach((dynamicCmp, index) => {
-                console.log(dynamicCmp.nativeElement.innerHTML);
-                expect(dynamicCmp.nativeElement.textContent).toBe(`Dynamic-${index + 1}`);
+        TestBed.compileComponents().then(() => {
+            const fixture = TestBed.createComponent(MultipleCmp);
+            fixture.detectChanges();
+            fixture.ngZone.onStable.subscribe(() => {
+                const dynamicCmps = fixture.debugElement.queryAll(el => el.name === 'my-component');
+                expect(dynamicCmps.length).toBe(2);
+                dynamicCmps.forEach((dynamicCmp, index) => {
+                    console.log(dynamicCmp.nativeElement.innerHTML);
+                    expect(dynamicCmp.nativeElement.textContent).toBe(`Dynamic-${index + 1}`);
+                });
+            });
+        });
+    }));
+
+    it('without context/selector', async(() => {
+        TestBed.overrideComponent(TestCmp, {
+            set: {
+                template: `<div *componentOutlet="template"></div>`
+            }
+        });
+        TestBed.compileComponents().then(() => {
+            const fixture = TestBed.createComponent(TestCmp);
+            const now = Date.now();
+            fixture.componentInstance.template = `<div><p>${now}</p></div>`;
+            fixture.detectChanges();
+            fixture.ngZone.onStable.subscribe(() => {
+                console.log(fixture.nativeElement.innerHTML);
+                expect(fixture.nativeElement.textContent).toBe(`${now}`);
             });
         });
     }));

@@ -13,7 +13,7 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import {COMPONENT_OUTLET_MODULE} from './provider';
+import { COMPONENT_OUTLET_MODULE } from './provider';
 
 /**
  * ComponentOutlet is a directive to create dynamic component.
@@ -75,11 +75,11 @@ export class ComponentOutlet implements OnDestroy {
     });
 
     const cmpClass = class _ implements OnDestroy {
-        context = ctx;
+      context = ctx;
 
-        ngOnDestroy() {
-            ctx = null;
-        }
+      ngOnDestroy() {
+        ctx = null;
+      }
     };
 
     return Component(metadata)(cmpClass);
@@ -105,7 +105,7 @@ export class ComponentOutlet implements OnDestroy {
       .then(factory => {
         let cmpFactory: any;
         for (let i = factory.componentFactories.length - 1; i >= 0; i--) {
-          if (factory.componentFactories[i].selector === this.selector) {
+          if (factory.componentFactories[i].componentType === this.cmpType) {
             cmpFactory = factory.componentFactories[i];
             break;
           }
@@ -123,16 +123,16 @@ export class ComponentOutlet implements OnDestroy {
 
   ngOnDestroy() {
     if (this.component) {
-        this.component.destroy();
+      this.component.destroy();
     }
 
     if (this.compiler) {
-        if (this.cmpType) {
-            this.compiler.clearCacheFor(this.cmpType);
-        }
-        if (this.moduleType) {
-            this.compiler.clearCacheFor(this.moduleType);
-        }
+      if (this.cmpType) {
+        this.compiler.clearCacheFor(this.cmpType);
+      }
+      if (this.moduleType) {
+        this.compiler.clearCacheFor(this.moduleType);
+      }
     }
   }
 }
