@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ComponentOutlet, provideComponentOutletModule } from '../index';
@@ -48,7 +48,8 @@ describe('ComponentOutlet', () => {
             declarations: [ComponentOutlet, MultipleCmp, TestCmp],
             providers: [
                 provideComponentOutletModule({
-                    imports: [CommonModule]
+                    imports: [CommonModule],
+                    schemas: [CUSTOM_ELEMENTS_SCHEMA]
                 })
             ]
         });
@@ -91,6 +92,24 @@ describe('ComponentOutlet', () => {
             const fixture = TestBed.createComponent(TestCmp);
             const now = Date.now();
             fixture.componentInstance.template = `<div><p>${now}</p></div>`;
+            fixture.detectChanges();
+            fixture.ngZone.onStable.subscribe(() => {
+                console.log(fixture.nativeElement.innerHTML);
+                expect(fixture.nativeElement.textContent).toBe(`${now}`);
+            });
+        });
+    }));
+    
+    it('with custom-element', async(() => {
+        TestBed.overrideComponent(TestCmp, {
+            set: {
+                template: `<div *componentOutlet="template"></div>`
+            }
+        });
+        TestBed.compileComponents().then(() => {
+            const fixture = TestBed.createComponent(TestCmp);
+            const now = Date.now();
+            fixture.componentInstance.template = `<unknown-element>${now}</unknown-element>`;
             fixture.detectChanges();
             fixture.ngZone.onStable.subscribe(() => {
                 console.log(fixture.nativeElement.innerHTML);

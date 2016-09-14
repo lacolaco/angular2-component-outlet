@@ -91,6 +91,7 @@ export class ComponentOutlet implements OnDestroy {
     const moduleMeta: NgModule = {
       imports: this.moduleMeta.imports,
       providers: this.moduleMeta.providers,
+      schemas: this.moduleMeta.schemas,
       declarations: declarations
     };
     return NgModule(moduleMeta)(class _ { })
