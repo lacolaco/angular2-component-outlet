@@ -7,6 +7,7 @@ import {
   Inject,
   Input,
   NgModule,
+  SimpleChanges,
   Type,
   ViewContainerRef,
   ReflectiveInjector,
@@ -52,16 +53,16 @@ import { COMPONENT_OUTLET_MODULE } from './provider';
   selector: '[componentOutlet]',
 })
 export class ComponentOutlet implements OnDestroy {
-  @Input('componentOutlet') private template: string;
-  @Input('componentOutletSelector') private selector: string;
-  @Input('componentOutletContext') private context: any;
+  @Input('componentOutlet') template: string;
+  @Input('componentOutletSelector') selector: string;
+  @Input('componentOutletContext') context: any;
 
-  component: ComponentRef<any>;
-  moduleType: any;
-  cmpType: any;
+  private component: ComponentRef<any>;
+  private moduleType: any;
+  private cmpType: any;
 
   constructor(
-    @Inject(COMPONENT_OUTLET_MODULE) private moduleMeta: NgModule,
+    @Inject(COMPONENT_OUTLET_MODULE) private moduleMeta: any, /** NgModule (workaround for AoT) */
     private vcRef: ViewContainerRef,
     private compiler: Compiler
   ) { }
@@ -97,7 +98,7 @@ export class ComponentOutlet implements OnDestroy {
     return NgModule(moduleMeta)(class _ { })
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     if (!this.template) return;
     this.cmpType = this._createDynamicComponent();
     this.moduleType = this._createDynamicModule(this.cmpType);

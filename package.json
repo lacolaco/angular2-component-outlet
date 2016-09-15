@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "ngc": "ngc -p .",
+    "ngc:integrationtest": "ngc -p integrationtest",
     "build": "npm run ngc",
     "prepublish": "npm test",
-    "test": "npm run ngc && karma start karma.conf.js"
+    "test": "npm run ngc && karma start karma.conf.js && npm run integrationtest",
+    "integrationtest": "npm run ngc:integrationtest"
   },
   "repository": {
     "type": "git",
