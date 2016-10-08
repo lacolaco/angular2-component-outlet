@@ -12,7 +12,7 @@ class TestCmp {
         flag: true,
         text: 'Dynamic'
     };
-    template = `<div><p *ngIf="context.flag">{{context.text}}</p></div>`;
+    template = `<div><p *ngIf="flag">{{text}}</p></div>`;
 }
 
 @Component({
@@ -25,14 +25,14 @@ class TestCmp {
 class MultipleCmp {
     list = [
         {
-            template: `<div>{{context.text}}</div>`,
+            template: `<div>{{text}}</div>`,
             context: {
                 text: 'Dynamic-1'
             },
             selector: 'my-component'
         },
         {
-            template: `<div>{{context.text}}</div>`,
+            template: `<div>{{text}}</div>`,
             context: {
                 text: 'Dynamic-2'
             },

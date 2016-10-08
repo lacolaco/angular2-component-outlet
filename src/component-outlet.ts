@@ -1,6 +1,5 @@
 import {
   Component,
-  ComponentFactoryResolver,
   ComponentRef,
   Compiler,
   Directive,
@@ -68,19 +67,13 @@ export class ComponentOutlet implements OnDestroy {
   ) { }
 
   private _createDynamicComponent(): Type<any> {
-    let ctx = this.context;
 
     const metadata = new Component({
       selector: this.selector,
       template: this.template,
     });
 
-    const cmpClass = class _ implements OnDestroy {
-      context = ctx;
-
-      ngOnDestroy() {
-        ctx = null;
-      }
+    const cmpClass = class _ {
     };
 
     return Component(metadata)(cmpClass);
@@ -95,7 +88,7 @@ export class ComponentOutlet implements OnDestroy {
       schemas: this.moduleMeta.schemas,
       declarations: declarations
     };
-    return NgModule(moduleMeta)(class _ { })
+    return NgModule(moduleMeta)(class _ { });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -118,6 +111,7 @@ export class ComponentOutlet implements OnDestroy {
         if (cmpFactory) {
           this.vcRef.clear();
           this.component = this.vcRef.createComponent(cmpFactory, 0, injector);
+          Object.assign(this.component.instance, this.context);
           this.component.changeDetectorRef.detectChanges();
         }
       });
