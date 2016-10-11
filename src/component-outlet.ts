@@ -92,7 +92,9 @@ export class ComponentOutlet implements OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.template) return;
+    if (!this.template) {
+      return;
+    }
     this.cmpType = this._createDynamicComponent();
     this.moduleType = this._createDynamicModule(this.cmpType);
     const injector = ReflectiveInjector.fromResolvedProviders([], this.vcRef.parentInjector);
