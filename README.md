@@ -7,7 +7,9 @@
 $ npm install --save angular2-component-outlet
 ```
 
-Current Angular Version: **2.0.0**
+Current Angular Version: **2.0.2**
+
+**Live Demo**: [Plunker](https://plnkr.co/edit/dhRQ3U?p=preview)
 
 ---
 
