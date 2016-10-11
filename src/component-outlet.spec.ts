@@ -49,7 +49,8 @@ describe('ComponentOutlet', () => {
             providers: [
                 provideComponentOutletModule({
                     imports: [CommonModule],
-                    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+                    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+                    declarations: [] // for issue #27
                 })
             ]
         });

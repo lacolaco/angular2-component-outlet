@@ -80,7 +80,7 @@ export class ComponentOutlet implements OnDestroy {
   }
 
   private _createDynamicModule(componentType: Type<any>) {
-    const declarations = this.moduleMeta.declarations || [];
+    const declarations = [].concat(this.moduleMeta.declarations || []);
     declarations.push(componentType);
     const moduleMeta: NgModule = {
       imports: this.moduleMeta.imports,
