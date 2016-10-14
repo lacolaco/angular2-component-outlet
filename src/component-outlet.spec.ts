@@ -38,7 +38,7 @@ class MultipleCmp {
             },
             selector: 'my-component'
         }
-    ]
+    ];
 }
 
 describe('ComponentOutlet', () => {
@@ -61,7 +61,7 @@ describe('ComponentOutlet', () => {
             const fixture = TestBed.createComponent(TestCmp);
             fixture.detectChanges();
             fixture.ngZone.onStable.subscribe(() => {
-                const dynamicCmp = fixture.debugElement.query(el => el.name === 'my-component')
+                const dynamicCmp = fixture.debugElement.query(el => el.name === 'my-component');
                 console.log(dynamicCmp.nativeElement.innerHTML);
                 expect(dynamicCmp.nativeElement.textContent).toBe('Dynamic');
             });
@@ -100,7 +100,7 @@ describe('ComponentOutlet', () => {
             });
         });
     }));
-    
+
     it('with custom-element', async(() => {
         TestBed.overrideComponent(TestCmp, {
             set: {

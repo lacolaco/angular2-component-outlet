@@ -6,10 +6,11 @@
   "scripts": {
     "ngc": "ngc -p .",
     "ngc:integrationtest": "ngc -p integrationtest",
-    "build": "npm run ngc",
+    "build": "npm run lint && npm run ngc",
     "prepublish": "npm test",
     "test": "npm run ngc && karma start karma.conf.js && npm run integrationtest",
-    "integrationtest": "npm run ngc:integrationtest"
+    "integrationtest": "npm run ngc:integrationtest",
+    "lint": "tslint --project tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "karma-jasmine": "^1.0.2",
     "rxjs": "^5.0.0-beta.12",
     "systemjs": "^0.19.37",
+    "tslint": "^3.15.1",
     "typescript": "^2.0.2",
     "zone.js": "^0.6.21"
   }
