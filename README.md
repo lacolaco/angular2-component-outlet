@@ -1,5 +1,7 @@
 # angular2-component-outlet
 
+## This project is closed and new **[ng-dynamic](https://github.com/laco0416/ng-dynamic)** has started 
+
 [![npm version](https://badge.fury.io/js/angular2-component-outlet.svg)](https://badge.fury.io/js/angular2-component-outlet)
 [![CircleCI](https://circleci.com/gh/laco0416/angular2-component-outlet/tree/master.svg?style=svg)](https://circleci.com/gh/laco0416/angular2-component-outlet/tree/master)
 
